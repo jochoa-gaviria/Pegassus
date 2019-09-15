@@ -6,15 +6,14 @@ namespace Pegassus.Web.Data.Entities
     public class Room
     {
         public int Id { get; set; }
-
+        
+        [Display(Name = "Image")]
+        public string ImageUrl { get; set; }
 
         [Display(Name = "Total Capacity")]
         [Range(1, 300, ErrorMessage = "The number of invites, must be between 1 and 300")]
         [Required(ErrorMessage = "The field {0} is mandatory")]
         public int Capacity { get; set; }
-        
-        [Display(Name = "Image")]
-        public string ImageUrl { get; set; }
 
         [MaxLength(100, ErrorMessage = "The field {0} cannot have more than {1} characters")]
         public string Address { get; set; }
