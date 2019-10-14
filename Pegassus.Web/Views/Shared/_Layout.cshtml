@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Pegassus.Web</title>
+    <title>@ViewData["Title"] - Pegassus Events</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -26,13 +26,44 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Pegassus.Web</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Pegassus Events</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li><a asp-area="" asp-controller="Owners" asp-action="Index">Owners</a></li>
+                        <li><a asp-area="" asp-controller="Organizers" asp-action="Index">Organizers</a></li>
+                        <li><a asp-area="" asp-controller="Admins" asp-action="Index">Admins</a></li>
+                        <li><a asp-area="" asp-controller="EventTypes" asp-action="Index">Event Types</a></li>
+                    }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
+                    {
+                        <li><a asp-area="" asp-controller="Agenda" asp-action="Index">Agenda</a></li>
+                        <li><a asp-area="" asp-controller="Rooms" asp-action="Index">Rooms</a></li>
+                        <li><a asp-area="" asp-controller="Inviteds" asp-action="Index">Inviteds</a></li>
+                    }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("Owner"))
+                    {
+                        <li><a asp-area="" asp-controller="Agenda" asp-action="Index">Agenda</a></li>
+                        <li><a asp-area="" asp-controller="Rooms" asp-action="Index">Rooms</a></li>
+                    }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("Invited"))
+                    {
+
+                    }
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -44,7 +75,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2019 - Pegassus.Web</p>
+            <p>&copy; 2019 - Pegassus Event</p>
         </footer>
     </div>
 

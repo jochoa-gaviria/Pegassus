@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Pegassus.Web.Data.Entities;
+using Pegassus.Web.Models;
 
 namespace Pegassus.Web.Helpers
 {
@@ -18,6 +19,20 @@ namespace Pegassus.Web.Helpers
             _roleManager = roleManager;
             _signInManager = signInManager;
         }
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+            return await _signInManager.PasswordSignInAsync(
+                model.Username,
+                model.Password,
+                model.RememberMe,
+                false);
+        }
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);
