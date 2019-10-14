@@ -17,5 +17,13 @@ namespace Pegassus.Web.Helpers
         Task<bool> IsUserInRoleAsync(User user, string roleName);
         Task<SignInResult> LoginAsync(LoginViewModel model);
         Task LogoutAsync();
+        Task<SignInResult> ValidatePasswordAsync(User user, string password);
+        Task<IdentityResult> UpdateUserAsync(User user);
+        Task<string> GenerateEmailConfirmationTokenAsync(User user);
+        Task<User> GetUserByIdAsync(string userId);
+        Task<string> GeneratePasswordResetTokenAsync(User user);
+        Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
+        Task<IdentityResult> ConfirmEmailAsync(User user, string token);
+        Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
     }
 }
