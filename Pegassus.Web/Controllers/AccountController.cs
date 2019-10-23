@@ -84,7 +84,8 @@ namespace Pegassus.Web.Controllers
                 {
                     var result = await _userHelper.ValidatePasswordAsync(
                         user,
-                        model.Password);
+                        model.Password
+                        );
 
                     if (result.Succeeded)
                     {
