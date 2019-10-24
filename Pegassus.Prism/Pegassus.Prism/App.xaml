@@ -4,8 +4,9 @@
              xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
              x:Class="Pegassus.Prism.App">
 	<Application.Resources>
-
+    
 		<!-- Application resource dictionary -->
-
-	</Application.Resources>
+        <x:String x:Key="UrlAPI">https://pegassus.azurewebsites.net/</x:String>
+        
+    </Application.Resources>
 </prism:PrismApplication>
