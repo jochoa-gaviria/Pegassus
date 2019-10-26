@@ -74,11 +74,15 @@ namespace Pegassus.Prism.ViewModels
         }
 
         /// <summary>
-        /// Revisar, Theres a problem
         /// Tener en cuenta el tipo de usuario
         /// </summary>
         private async void Login()
         {
+            if (UserType is null)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "You must select a user type", "Accept");
+                return;
+            }
             if (string.IsNullOrEmpty(Email))
             {
                 await App.Current.MainPage.DisplayAlert("Error", "You must enter an email.", "Accept");
@@ -120,28 +124,44 @@ namespace Pegassus.Prism.ViewModels
                 Password = string.Empty;
                 return;
             }
-
             var token = response.Result;
-            var response2 = await _apiService.GetOrganizerByEmailAsync(url, "api", "/Organizers/GetOrganizerByEmail", "bearer", token.Token, Email); //TODO Revisar
-            if (!response2.IsSuccess)
+            if (UserType.Value=="Organizer")
             {
-                IsRunning = false;
-                IsEnabled = true;
-                await App.Current.MainPage.DisplayAlert("Error", "This user have a big problem, call support.", "Accept");
-                return;
+                var response2 = await _apiService.GetOrganizerByEmailAsync(url, "api", "/Organizers/GetOrganizerByEmail", "bearer", token.Token, Email);
+                if (!response2.IsSuccess)
+                {
+                    IsRunning = false;
+                    IsEnabled = true;
+                    await App.Current.MainPage.DisplayAlert("Error", "You did select an incorrect user type", "Accept");
+                    return;
+                }
+
+                var organizer = response2.Result;
+                Settings.Organizer = JsonConvert.SerializeObject(organizer);
+            }
+            else
+            {
+                var response2 = await _apiService.GetInvitedByEmailAsync(url, "api", "/Invited/GetInvitedByEmail", "bearer", token.Token, Email);
+                if (!response2.IsSuccess)
+                {
+                    IsRunning = false;
+                    IsEnabled = true;
+                    await App.Current.MainPage.DisplayAlert("Error", "You did select an incorrect user type", "Accept");
+                    return;
+                }
+
+                var invited = response2.Result;
+                Settings.Invited = JsonConvert.SerializeObject(invited);
             }
 
-            var organizer = response2.Result;
-
-            Settings.Organizer = JsonConvert.SerializeObject(organizer);
             Settings.Token = JsonConvert.SerializeObject(token);
             Settings.IsRemembered = IsRemember;
             Settings.UserType = UserType.Value;
 
             IsRunning = false;
             IsEnabled = true;
-
             await _navigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventsPage");
+            //await _navigationService.NavigateAsync("EventsPage");
             Password = string.Empty;
         }
 

@@ -29,7 +29,7 @@ namespace Pegassus.Web.Controllers.API
             {
                 Text = u.Name,
                 Value = u.Name
-            }).ToList().Where(u => u.Text == "Owner" || u.Text == "Organizer").ToList();
+            }).ToList().Where(u => u.Text == "Invited" || u.Text == "Organizer").ToList();
         }
     }
 }

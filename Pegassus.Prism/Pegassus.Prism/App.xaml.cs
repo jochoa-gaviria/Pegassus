@@ -33,7 +33,6 @@ namespace Pegassus.Prism
             var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
             if (Settings.IsRemembered && token?.Expiration > DateTime.Now)
             {
-                //TODO tener en cuenta el tipo de usuario. 
                 if (Settings.UserType=="Organizer")
                 {
                     await NavigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventsPage");
@@ -46,6 +45,7 @@ namespace Pegassus.Prism
             else
             {
                 await NavigationService.NavigateAsync("/NavigationPage/LoginPage");
+                //await NavigationService.NavigateAsync("PegassusMasterDetailPage");
             }
 
         }
@@ -58,6 +58,11 @@ namespace Pegassus.Prism
             containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
             containerRegistry.RegisterForNavigation<RememberPasswordPage, RememberPasswordPageViewModel>();
             containerRegistry.RegisterForNavigation<PegassusMasterDetailPage, PegassusMasterDetailPageViewModel>();
+            containerRegistry.RegisterForNavigation<EventsPage, EventsPageViewModel>();
+            containerRegistry.RegisterForNavigation<EventPage, EventPageViewModel>();
+            containerRegistry.RegisterForNavigation<AgendaPage, AgendaPageViewModel>();
+            containerRegistry.RegisterForNavigation<MapPage, MapPageViewModel>();
+            containerRegistry.RegisterForNavigation<ProfilePage, ProfilePageViewModel>();
         }
     }
 }

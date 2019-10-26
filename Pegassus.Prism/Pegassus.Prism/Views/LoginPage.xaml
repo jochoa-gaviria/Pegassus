@@ -26,7 +26,7 @@
                 <Picker
                 	        Grid.Column="1"
                 	        Grid.Row="2"
-                	        ItemDisplayBinding="{Binding Value}"
+                	        ItemDisplayBinding="{Binding Text}"
                 	        ItemsSource="{Binding UserTypes}"
                 	        SelectedItem="{Binding UserType}"
                 	        Title="Select your user role..."/>

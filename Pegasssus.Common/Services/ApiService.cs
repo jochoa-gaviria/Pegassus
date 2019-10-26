@@ -28,10 +28,47 @@ namespace Pegasssus.Common.Services
             return await CrossConnectivity.Current.IsRemoteReachable(url);
         }
 
-        public Task<Response<InvitedResponse>> GetInvitedByEmailAsync(string urlBase, string servicePrefix, string controller, string tokenType, string accessToken, string email)
+        public async Task<Response<InvitedResponse>> GetInvitedByEmailAsync(string urlBase, string servicePrefix, string controller, string tokenType, string accessToken, string email)
         {
-            //TODO
-            throw new NotImplementedException();
+            try
+            {
+                var request = new EmailRequest { Email = email };
+                var requestString = JsonConvert.SerializeObject(request);
+                var content = new StringContent(requestString, Encoding.UTF8, "application/json");
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
+                var url = $"{servicePrefix}{controller}";
+                var response = await client.PostAsync(url, content);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response<InvitedResponse>
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                var invited = JsonConvert.DeserializeObject<InvitedResponse>(result);
+                return new Response<InvitedResponse>
+                {
+                    IsSuccess = true,
+                    Result = invited
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<InvitedResponse>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
 
         public async Task<Response<object>> GetListAsync<T>(string urlBase, string servicePrefix, string controller, string tokenType, string accessToken)
@@ -77,10 +114,47 @@ namespace Pegasssus.Common.Services
             }
         }
 
-        public Task<Response<OrganizerResponse>> GetOrganizerByEmailAsync(string urlBase, string servicePrefix, string controller, string tokenType, string accessToken, string email)
+        public async Task<Response<OrganizerResponse>> GetOrganizerByEmailAsync(string urlBase, string servicePrefix, string controller, string tokenType, string accessToken, string email)
         {
-            //TODO
-            throw new NotImplementedException();
+            try
+            {
+                var request = new EmailRequest { Email = email };
+                var requestString = JsonConvert.SerializeObject(request);
+                var content = new StringContent(requestString, Encoding.UTF8, "application/json");
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
+                var url = $"{servicePrefix}{controller}";
+                var response = await client.PostAsync(url, content);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response<OrganizerResponse>
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                var organizer = JsonConvert.DeserializeObject<OrganizerResponse>(result);
+                return new Response<OrganizerResponse>
+                {
+                    IsSuccess = true,
+                    Result = organizer
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<OrganizerResponse>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
 
         public async Task<Response<TokenResponse>> GetTokenAsync(string urlBase, string servicePrefix, string controller, TokenRequest request)
