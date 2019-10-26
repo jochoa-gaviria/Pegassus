@@ -4,6 +4,11 @@ using Pegassus.Prism.ViewModels;
 using Pegassus.Prism.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Pegasssus.Common.Services;
+using Newtonsoft.Json;
+using Pegasssus.Common.Helpers;
+using Pegasssus.Common.Models;
+using System;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Pegassus.Prism
@@ -21,15 +26,38 @@ namespace Pegassus.Prism
 
         protected override async void OnInitialized()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTU5NjU0QDMxMzcyZTMzMmUzMGorR2RMTlpkbDNYN09zTW5BaG9FTEJCZDJXa28rQXVyNzJRSGFUSEhMZWc9");
+
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("NavigationPage/LoginPage");
+            var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
+            if (Settings.IsRemembered && token?.Expiration > DateTime.Now)
+            {
+                //TODO tener en cuenta el tipo de usuario. 
+                if (Settings.UserType=="Organizer")
+                {
+                    await NavigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventsPage");
+                }
+                else
+                {
+                    await NavigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventPage");
+                }
+            }
+            else
+            {
+                await NavigationService.NavigateAsync("/NavigationPage/LoginPage");
+            }
+
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<IApiService, ApiService>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
+            containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
+            containerRegistry.RegisterForNavigation<RememberPasswordPage, RememberPasswordPageViewModel>();
+            containerRegistry.RegisterForNavigation<PegassusMasterDetailPage, PegassusMasterDetailPageViewModel>();
         }
     }
 }
