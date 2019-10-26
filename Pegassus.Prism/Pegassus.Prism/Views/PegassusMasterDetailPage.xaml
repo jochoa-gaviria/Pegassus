@@ -37,7 +37,8 @@
                                         Grid.Column="1"
                                         FontAttributes="Bold"
                                         VerticalOptions="Center"
-                                        Text="{Binding Title}"/>
+                                        Text="{Binding Title}"
+                                        TextColor="{StaticResource colorFontInverse}"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

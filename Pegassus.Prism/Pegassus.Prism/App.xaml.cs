@@ -35,7 +35,8 @@ namespace Pegassus.Prism
             {
                 if (Settings.UserType=="Organizer")
                 {
-                    await NavigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventsPage");
+                    //await NavigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventsPage");
+                    await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventsPage");
                 }
                 else
                 {

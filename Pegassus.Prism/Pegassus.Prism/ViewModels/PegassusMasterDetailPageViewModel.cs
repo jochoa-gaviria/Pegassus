@@ -26,7 +26,7 @@ namespace Pegassus.Prism.ViewModels
             {
                 new Menu
                 {
-                    Icon = "ic_pets_menu",
+                    Icon = "ic_event_note",
                     PageName = "EventsPage",
                     Title = "My Events"
                 },
