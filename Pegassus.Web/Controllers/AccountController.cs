@@ -459,7 +459,8 @@ namespace Pegassus.Web.Controllers
 
             return View(model);
         }
-
+        [HttpGet]
+        [Route("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -488,6 +489,7 @@ namespace Pegassus.Web.Controllers
         }
 
         [HttpPost]
+        [Route("RecoverPassword")]
         public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -521,6 +523,7 @@ namespace Pegassus.Web.Controllers
         }
 
         [HttpPost]
+        [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             var user = await _userHelper.GetUserByEmailAsync(model.UserName);
