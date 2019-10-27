@@ -160,7 +160,7 @@ namespace Pegassus.Prism.ViewModels
 
             IsRunning = false;
             IsEnabled = true;
-            await _navigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventsPage");
+            await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventsPage");
             //await _navigationService.NavigateAsync("EventsPage");
             Password = string.Empty;
         }
