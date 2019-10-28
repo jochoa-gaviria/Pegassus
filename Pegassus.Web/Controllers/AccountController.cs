@@ -483,6 +483,8 @@ namespace Pegassus.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Route("RecoverPassword")]
         public IActionResult RecoverPassword()
         {
             return View();
@@ -517,6 +519,8 @@ namespace Pegassus.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("ResetPassword")]
         public IActionResult ResetPassword(string token)
         {
             return View();

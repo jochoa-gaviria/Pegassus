@@ -109,7 +109,7 @@ namespace Pegassus.Web.Controllers.API
                 });
             }
             var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
-            var link = Url.Action("/ResetPassword", "Account", new
+            var link = Url.Action("ResetPassword", "Account", new
             {
                 token = myToken
             }, protocol: HttpContext.Request.Scheme);
