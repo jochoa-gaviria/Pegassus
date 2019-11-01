@@ -148,8 +148,12 @@ namespace Pegassus.Prism.ViewModels
                     "Accept");
                 return;
             }
-            //TODO traer el usuario actualizado
-            if (Settings.UserType=="Organizer")
+            await App.Current.MainPage.DisplayAlert(
+                "Ok",
+                "User updated succesfully.",
+                "Accept");
+
+            if (Settings.UserType == "Organizer")
             {
                 var response2 = await _apiService.GetOrganizerByEmailAsync(url, "api", "/Organizers/GetOrganizerByEmail", "bearer", token.Token, Organizer.Email);
                 if (!response2.IsSuccess)
@@ -171,11 +175,6 @@ namespace Pegassus.Prism.ViewModels
                 var invited = response2.Result;
                 Settings.Invited = JsonConvert.SerializeObject(invited);
             }
-
-            await App.Current.MainPage.DisplayAlert(
-                "Ok",
-                "User updated succesfully.",
-                "Accept");
         }
 
         private UserRequest AsingUserRequest()
