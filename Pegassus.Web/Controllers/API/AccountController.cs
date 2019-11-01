@@ -126,6 +126,7 @@ namespace Pegassus.Web.Controllers.API
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("PutUser")]
         public async Task<IActionResult> PutUser([FromBody] UserRequest request)
         {
             if (!ModelState.IsValid)
@@ -154,6 +155,7 @@ namespace Pegassus.Web.Controllers.API
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             if (!ModelState.IsValid)

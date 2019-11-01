@@ -141,7 +141,7 @@ namespace Pegassus.Prism.ViewModels
             }
             else
             {
-                var response2 = await _apiService.GetInvitedByEmailAsync(url, "api", "/Invited/GetInvitedByEmail", "bearer", token.Token, Email);
+                var response2 = await _apiService.GetInvitedByEmailAsync(url, "api", "/Inviteds/GetInvitedByEmail", "bearer", token.Token, Email);
                 if (!response2.IsSuccess)
                 {
                     IsRunning = false;
