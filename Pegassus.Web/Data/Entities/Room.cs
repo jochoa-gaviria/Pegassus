@@ -25,7 +25,7 @@ namespace Pegassus.Web.Data.Entities
 
         //TODO replace the correct URL for the image and make a carousel for the images
         public string ImageFullPath => string.IsNullOrEmpty(ImageUrl)
-         ? "https://myvetjochoa.azurewebsites.net/images/Pets/noimage.png"
-         : $"https://myvetjochoa.azurewebsites.net{ImageUrl.Substring(1)}";
+         ? "https://https://pegassus.azurewebsites.net/images/Rooms/noimage.png"
+         : $"https://pegassus.azurewebsites.net{ImageUrl.Substring(1)}";
     }
 }

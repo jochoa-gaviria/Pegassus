@@ -109,20 +109,12 @@
             </AbsoluteLayout>
         </ScrollView>
         <StackLayout
-            Orientation="Horizontal"
-            VerticalOptions="EndAndExpand">
-
+                Orientation="Vertical"
+                VerticalOptions="EndAndExpand">
             <Button
+                IsEnabled="{Binding IsEnabled}"
                 Command="{Binding SaveCommand}"
-                IsEnabled="{Binding IsEnabled}"
                 Text="{Binding SaveText}"/>
-
-            <Button
-                Command="{Binding DeleteCommand}"
-                IsEnabled="{Binding IsEnabled}"
-                IsVisible="{Binding IsEdit}"
-                Style="{StaticResource dangerButton}"
-                Text="Delete"/>
         </StackLayout>
     </StackLayout>
 

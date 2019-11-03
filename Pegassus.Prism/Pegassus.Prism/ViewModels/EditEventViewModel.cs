@@ -27,7 +27,6 @@ namespace Pegassus.Prism.ViewModels
         private ObservableCollection<InvitedNumberResponse> _invitedNumbers;
         private InvitedNumberResponse _invitedNumber;
         private DelegateCommand _saveCommand;
-        private DelegateCommand _deleteCommand;
         private OrganizerResponse _organizer;
 
         public EditEventViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
@@ -38,9 +37,6 @@ namespace Pegassus.Prism.ViewModels
         }
 
         public DelegateCommand SaveCommand => _saveCommand ?? (_saveCommand = new DelegateCommand(Save));
-
-
-        public DelegateCommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new DelegateCommand(Delete));
 
         public ObservableCollection<EventTypeResponse> EventTypes
         {
@@ -226,17 +222,18 @@ namespace Pegassus.Prism.ViewModels
             IsRunning = true;
             IsEnabled = false;
 
-            var request = new EventRequest
-            {
-                Name = Event.Name,
-                InvitedsNumber = InvitedNumber.Value,
-                EventTypeId = EventType.Id,
-                OrganizerId = _organizer.Id,
-                Remarks = Event.Remarks
-            };
 
             if (IsEdit)
             {
+                var request = new EventRequest
+                {
+                    Id=Event.Id,
+                    Name = Event.Name,
+                    InvitedsNumber = InvitedNumber.Value,
+                    EventTypeId = EventType.Id,
+                    OrganizerId = _organizer.Id,
+                    Remarks = Event.Remarks
+                };
                 var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
                 var url = App.Current.Resources["UrlAPI"].ToString();
                 var response = await _apiService.PutAsync(
@@ -266,10 +263,18 @@ namespace Pegassus.Prism.ViewModels
                 //TODO
                 //Para la edicion no navegar automaticamente.
                 //Dar la elección si se va a cambiar el salon o añadir invitados
-                await _navigationService.NavigateAsync("RoomsPage");
+                //await _navigationService.NavigateAsync("RoomsPage");
             }
             else
             {
+                var request = new EventRequest
+                {
+                    Name = Event.Name,
+                    InvitedsNumber = InvitedNumber.Value,
+                    EventTypeId = EventType.Id,
+                    OrganizerId = _organizer.Id,
+                    Remarks = Event.Remarks
+                };
                 var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
                 var url = App.Current.Resources["UrlAPI"].ToString();
                 var response = await _apiService.PostAsync(
@@ -300,12 +305,6 @@ namespace Pegassus.Prism.ViewModels
                 Settings.Event = JsonConvert.SerializeObject(request);
                 await _navigationService.NavigateAsync("RoomsPage");
             }
-        }
-
-        private void Delete()
-        {
-            //TODO
-            throw new NotImplementedException();
         }
 
         private async Task<bool> ValidateData()

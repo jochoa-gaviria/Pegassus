@@ -62,20 +62,20 @@ namespace Pegassus.Web.Controllers.API
             return Ok(_converterHelper.ToEventResponse(eventVar));
         }
 
-        [HttpPut("{id}")]
+        //[HttpPut("{id}")]
         [Route("EditEvent")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PutEvent([FromRoute] int id, [FromBody] EventRequest request)
+        public async Task<IActionResult> PutEvent([FromBody] EventRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != request.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != request.Id)
+            //{
+            //    return BadRequest("Bad request !!!");
+            //}
 
             var oldEvent = await _dataContext.Events.FindAsync(request.Id);
             if (oldEvent == null)

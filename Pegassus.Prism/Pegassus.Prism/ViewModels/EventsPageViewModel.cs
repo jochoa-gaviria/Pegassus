@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Pegasssus.Common.Helpers;
 using Pegasssus.Common.Models;
+using Pegasssus.Common.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -16,19 +17,29 @@ namespace Pegassus.Prism.ViewModels
         private OrganizerResponse _organizer;
         private InvitedResponse _invited;
         private ObservableCollection<EventItemViewModel> _events;
+        private bool _isRunning;
         private DelegateCommand _addEventCommand;
         private readonly INavigationService _navigationService;
+        private readonly IApiService _apiService;
 
-        public EventsPageViewModel(INavigationService navigationService) : base(navigationService)
+        public EventsPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
             _navigationService = navigationService;
-            LoadUser();            
+            _apiService = apiService;
+            LoadUser();
+            IsRunning = false;
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);
-            LoadUser();
+            RefreshUser();
+        }
+
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetProperty(ref _isRunning, value);
         }
 
         public DelegateCommand AddEventCommand => _addEventCommand ?? (_addEventCommand = new DelegateCommand(AddEvent));
@@ -52,6 +63,7 @@ namespace Pegassus.Prism.ViewModels
                     Name = p.Name,
                     EventType = p.EventType,
                     Date = p.Date,
+                    Remarks = p.Remarks,
                 }).ToList());
             }
             else
@@ -65,8 +77,45 @@ namespace Pegassus.Prism.ViewModels
                     Name = p.Name,
                     EventType = p.EventType,
                     Date = p.Date,
+                    Remarks = p.Remarks,
                 }).ToList());
             }
+        }
+
+        private async void RefreshUser()
+        {
+            IsRunning = true;
+            var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            if (Settings.UserType == "Organizer")
+            {
+                var response = await _apiService.GetOrganizerByEmailAsync(url, "api", "/Organizers/GetOrganizerByEmail", "bearer", token.Token, _organizer.Email);
+                if (!response.IsSuccess)
+                {
+                    IsRunning = false;
+                    await App.Current.MainPage.DisplayAlert("Error", "You did select an incorrect user type", "Accept");
+                    return;
+                }
+
+                var organizer = response.Result;
+                Settings.Organizer = JsonConvert.SerializeObject(organizer);
+            }
+            else
+            {
+                var response = await _apiService.GetInvitedByEmailAsync(url, "api", "/Inviteds/GetInvitedByEmail", "bearer", token.Token, _invited.Email);
+                if (!response.IsSuccess)
+                {
+                    IsRunning = false;
+                    await App.Current.MainPage.DisplayAlert("Error", "You did select an incorrect user type", "Accept");
+                    return;
+                }
+
+                var invited = response.Result;
+                Settings.Invited = JsonConvert.SerializeObject(invited);
+            }
+            LoadUser();
+            IsRunning = false;
+
         }
 
         private async void AddEvent()
