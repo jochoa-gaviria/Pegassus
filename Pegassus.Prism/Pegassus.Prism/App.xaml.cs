@@ -65,6 +65,9 @@ namespace Pegassus.Prism
             containerRegistry.RegisterForNavigation<MapPage, MapPageViewModel>();
             containerRegistry.RegisterForNavigation<ProfilePage, ProfilePageViewModel>();
             containerRegistry.RegisterForNavigation<ChangePasswordPage, ChangePasswordPageViewModel>();
+            containerRegistry.RegisterForNavigation<EditEvent, EditEventViewModel>();
+            containerRegistry.RegisterForNavigation<RoomsPage, RoomsPageViewModel>();
+            containerRegistry.RegisterForNavigation<AddInvitedsPage, AddInvitedsPageViewModel>();
         }
     }
 }

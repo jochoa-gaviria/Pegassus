@@ -13,7 +13,7 @@ namespace Pegasssus.Common.Models
         public string Name { get; set; }
 
         [Required]
-        public int InvitesNumber { get; set; }
+        public int InvitedsNumber { get; set; }
 
         public int OrganizerId { get; set; }
 

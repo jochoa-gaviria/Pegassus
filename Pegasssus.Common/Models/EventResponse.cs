@@ -10,11 +10,13 @@ namespace Pegasssus.Common.Models
 
         public string Name { get; set; }
 
-        public int InvitesNumber { get; set; }
+        public int InvitedsNumber { get; set; }
 
         public string EventType { get; set; }
 
         public string Remarks { get; set; }
+
+        public DateTime Date { get; set; }
 
         public string Organizer { get; set; }
 

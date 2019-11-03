@@ -54,13 +54,14 @@ namespace Pegassus.Web.Controllers.API
                 PhoneNumber = organizer.User.PhoneNumber,
                 Events = organizer.Events.Select(p => new EventResponse
                 {
-                    InvitesNumber = p.InvitesNumber,
+                    InvitedsNumber = p.InvitesNumber,
                     Id = p.Id,
                     EventType = p.EventType.Name,
                     Name = p.Name,
                     Remarks = p.Remarks,
-                    RoomAddress = p.Room.Address,
-                    RoomCapacity = p.Room.Capacity
+                    //RoomAddress = p.Room.Address,
+                    //RoomCapacity = p.Room.Capacity
+                    //TODO -> Add the room data
                 }).ToList()
             };
 

@@ -52,6 +52,14 @@ namespace Pegasssus.Common.Services
             string tokenType,
             string accessToken);
 
+        Task<Response<object>> PostAsync<T>(
+            string urlBase,
+            string servicePrefix,
+            string controller,
+            T model,
+            string tokenType,
+            string accessToken);
+
         Task<Response<object>> ChangePasswordAsync(
             string urlBase,
             string servicePrefix,
