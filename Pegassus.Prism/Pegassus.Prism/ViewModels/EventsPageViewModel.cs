@@ -25,6 +25,12 @@ namespace Pegassus.Prism.ViewModels
             LoadUser();            
         }
 
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            base.OnNavigatedTo(parameters);
+            LoadUser();
+        }
+
         public DelegateCommand AddEventCommand => _addEventCommand ?? (_addEventCommand = new DelegateCommand(AddEvent));
 
         public ObservableCollection<EventItemViewModel> Events

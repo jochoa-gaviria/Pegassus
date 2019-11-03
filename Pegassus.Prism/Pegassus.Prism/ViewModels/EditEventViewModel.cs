@@ -261,8 +261,11 @@ namespace Pegassus.Prism.ViewModels
 
                 await App.Current.MainPage.DisplayAlert(
                     "Ok",
-                    response.Message,
+                    "The event was updated susccesfully, please select the best room for you.",
                     "Accept");
+                //TODO
+                //Para la edicion no navegar automaticamente.
+                //Dar la elección si se va a cambiar el salon o añadir invitados
                 await _navigationService.NavigateAsync("RoomsPage");
             }
             else
@@ -291,8 +294,10 @@ namespace Pegassus.Prism.ViewModels
 
                 await App.Current.MainPage.DisplayAlert(
                     "Ok",
-                    response.Message,
+                    "The event was added susccesfully, please select the best room for you.",
                     "Accept");
+
+                Settings.Event = JsonConvert.SerializeObject(request);
                 await _navigationService.NavigateAsync("RoomsPage");
             }
         }

@@ -10,11 +10,18 @@ namespace Pegasssus.Common.Helpers
         private const string _organizer = "Organizer";
         private const string _invited = "Invited";
         private const string _isRemembered = "IsRemembered";
+        private const string _room = "Room";
         private static readonly string _stringDefault = string.Empty;
         private static readonly bool _boolDefault = false;
         private static readonly string _userType = string.Empty;
 
         private static ISettings AppSettings => CrossSettings.Current;
+
+        public static string Room
+        {
+            get => AppSettings.GetValueOrDefault(_room, _stringDefault);
+            set => AppSettings.AddOrUpdateValue(_room, value);
+        }
 
         public static string Token
         {

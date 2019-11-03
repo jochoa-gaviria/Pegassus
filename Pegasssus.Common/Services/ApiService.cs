@@ -389,7 +389,6 @@ namespace Pegasssus.Common.Services
                 {
                     IsSuccess = true,
                     Result = obj,
-                    Message = "The event was added susccesfully, please select the best room for you."
                 };
             }
             catch (Exception ex)

@@ -12,14 +12,14 @@ namespace Pegassus.Prism.ViewModels
     public class EventItemViewModel : EventResponse
     {
         private readonly INavigationService _navigationService;
-        private DelegateCommand _selectPetCommand;
+        private DelegateCommand _selectEventCommand;
 
         public EventItemViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
         }
 
-        public DelegateCommand SelectPetCommand => _selectPetCommand ?? (_selectPetCommand = new DelegateCommand(SelectEvent));
+        public DelegateCommand SelectEventCommand => _selectEventCommand ?? (_selectEventCommand = new DelegateCommand(SelectEvent));
 
         private async void SelectEvent()
         {
