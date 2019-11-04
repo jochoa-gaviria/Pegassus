@@ -57,7 +57,7 @@ namespace Pegassus.Web.Controllers.API
                 EventInvitesNumber = invited.Event.InvitesNumber,
                 EventType = invited.Event.EventType.Name,
                 EventRemarks = invited.Event.Remarks,
-                RoomAddress = invited.Event.Room.Address
+                //RoomAddress = invited.Event.Room.Address
             };
             return Ok(response);
         }

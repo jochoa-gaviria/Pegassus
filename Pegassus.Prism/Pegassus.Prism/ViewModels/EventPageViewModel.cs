@@ -17,8 +17,17 @@ namespace Pegassus.Prism.ViewModels
         private DelegateCommand _editEventCommand;
         private DelegateCommand _selectRoomCommand;
         private DelegateCommand _addInvitedsCommand;
+        private bool _isVisible;
         public EventPageViewModel(INavigationService navigationService) : base(navigationService)
         {
+            if (Settings.UserType=="Organizer")
+            {
+                IsVisible = true;
+            }
+            else
+            {
+                IsVisible = false;
+            }
             _navigationService = navigationService;
             Title = "Event Details";
         }
@@ -27,6 +36,11 @@ namespace Pegassus.Prism.ViewModels
         public DelegateCommand SelectRoomCommand => _selectRoomCommand ?? (_selectRoomCommand = new DelegateCommand(SelectRoom));
         public DelegateCommand AddInvitedsCommand => _addInvitedsCommand ?? (_addInvitedsCommand = new DelegateCommand(AddInviteds));
 
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => SetProperty(ref _isVisible, value);
+        }
         public EventResponse Event
         {
             get => _event;

@@ -73,9 +73,6 @@ namespace Pegassus.Prism.ViewModels
             set => SetProperty(ref _userTypes, value);
         }
 
-        /// <summary>
-        /// Tener en cuenta el tipo de usuario
-        /// </summary>
         private async void Login()
         {
             if (UserType is null)
@@ -138,6 +135,14 @@ namespace Pegassus.Prism.ViewModels
 
                 var organizer = response2.Result;
                 Settings.Organizer = JsonConvert.SerializeObject(organizer);
+                Settings.Token = JsonConvert.SerializeObject(token);
+                Settings.IsRemembered = IsRemember;
+                Settings.UserType = UserType.Value;
+
+                IsRunning = false;
+                IsEnabled = true;
+                await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventsPage");
+                Password = string.Empty;
             }
             else
             {
@@ -152,17 +157,15 @@ namespace Pegassus.Prism.ViewModels
 
                 var invited = response2.Result;
                 Settings.Invited = JsonConvert.SerializeObject(invited);
+                Settings.Token = JsonConvert.SerializeObject(token);
+                Settings.IsRemembered = IsRemember;
+                Settings.UserType = UserType.Value;
+
+                IsRunning = false;
+                IsEnabled = true;
+                await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventPage");
+                Password = string.Empty;
             }
-
-            Settings.Token = JsonConvert.SerializeObject(token);
-            Settings.IsRemembered = IsRemember;
-            Settings.UserType = UserType.Value;
-
-            IsRunning = false;
-            IsEnabled = true;
-            await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventsPage");
-            //await _navigationService.NavigateAsync("EventsPage");
-            Password = string.Empty;
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)

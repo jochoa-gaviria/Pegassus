@@ -88,6 +88,7 @@
             <Button
                 Command="{Binding EditEventCommand}"
                 Text="Edit Event"
+                IsVisible="{Binding IsVisible}"
                 VerticalOptions="EndAndExpand"/>
             <StackLayout
                 Orientation="Horizontal"
@@ -95,11 +96,13 @@
                 <Button
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding SelectRoomCommand}"
+                IsVisible="{Binding IsVisible}"
                 BackgroundColor="{StaticResource colorSecondary}"
                 Text="Search for a room"/>
                 <Button
                 IsEnabled="{Binding IsEnabled}"
                 Command="{Binding AddInvitedsCommand}"
+                IsVisible="{Binding IsVisible}"
                 BackgroundColor="{StaticResource colorSecondary}"
                 Text="Add guests"/>
             </StackLayout>

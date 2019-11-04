@@ -1,4 +1,5 @@
-﻿using Pegasssus.Common.Models;
+﻿using Pegasssus.Common.Helpers;
+using Pegasssus.Common.Models;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -22,51 +23,89 @@ namespace Pegassus.Prism.ViewModels
         //TODO tener en cuenta el rol
         private void LoadMenus()
         {
-            var menus = new List<Menu>
+            if (Settings.UserType=="Organizer")
             {
-                new Menu
+                var menus = new List<Menu>
                 {
-                    Icon = "ic_event_note",
-                    PageName = "EventsPage",
-                    Title = "My Events"
-                },
+                    new Menu
+                    {
 
-                new Menu
-                {
-                    Icon = "ic_list_alt",
-                    PageName = "AgendaPage",
-                    Title = "My Agenda"
-                },
+                        Icon = "ic_event_note",
+                        PageName = "EventsPage",
+                        Title = "My Events"
+                    },
 
-                new Menu
-                {
-                    Icon = "ic_map",
-                    PageName = "MapPage",
-                    Title = "Map"
-                },
+                    new Menu
+                    {
+                        Icon = "ic_list_alt",
+                        PageName = "AgendaPage",
+                        Title = "My Agenda"
+                    },
 
-                new Menu
-                {
-                    Icon = "ic_person",
-                    PageName = "ProfilePage",
-                    Title = "Modify Profile"
-                },
+                    new Menu
+                    {
+                        Icon = "ic_person",
+                        PageName = "ProfilePage",
+                        Title = "Modify Profile"
+                    },
 
-                new Menu
-                {
-                    Icon = "ic_exit_to_app",
-                    PageName = "LoginPage",
-                    Title = "Logout"
-                }
-            };
-
-            Menus = new ObservableCollection<MenuItemViewModel>(
+                    new Menu
+                    {
+                        Icon = "ic_exit_to_app",
+                        PageName = "LoginPage",
+                        Title = "Logout"
+                    }
+                };
+                Menus = new ObservableCollection<MenuItemViewModel>(
                 menus.Select(m => new MenuItemViewModel(_navigationService)
                 {
                     Icon = m.Icon,
                     PageName = m.PageName,
                     Title = m.Title
                 }).ToList());
+            }
+            else
+            {
+                var menus = new List<Menu>
+                {
+                    new Menu
+                    {
+
+                        Icon = "ic_event_note",
+                        PageName = "EventPage",
+                        Title = "My Events"
+                    },
+
+                    new Menu
+                    {
+                        Icon = "ic_list_alt",
+                        PageName = "AgendaPage",
+                        Title = "My Agenda"
+                    },
+
+                    new Menu
+                    {
+                        Icon = "ic_person",
+                        PageName = "ProfilePage",
+                        Title = "Modify Profile"
+                    },
+
+                    new Menu
+                    {
+                        Icon = "ic_exit_to_app",
+                        PageName = "LoginPage",
+                        Title = "Logout"
+                    }
+                };
+                Menus = new ObservableCollection<MenuItemViewModel>(
+                menus.Select(m => new MenuItemViewModel(_navigationService)
+                {
+                    Icon = m.Icon,
+                    PageName = m.PageName,
+                    Title = m.Title
+                }).ToList());
+            }
+            
         }
     }
 }

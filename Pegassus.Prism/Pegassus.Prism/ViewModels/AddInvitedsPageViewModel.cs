@@ -156,6 +156,8 @@ namespace Pegassus.Prism.ViewModels
         }
         private async Task<bool> ValidateData()
         {
+            //TODO
+            //validate number of inviteds
             if (string.IsNullOrEmpty(Document))
             {
                 await App.Current.MainPage.DisplayAlert("Error", "You must enter a document.", "Accept");

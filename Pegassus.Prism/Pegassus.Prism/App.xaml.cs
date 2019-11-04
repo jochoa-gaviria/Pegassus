@@ -40,7 +40,7 @@ namespace Pegassus.Prism
                 }
                 else
                 {
-                    await NavigationService.NavigateAsync("/PegasssusMasterDetailPage/NavigationPage/EventPage");
+                    await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventPage");
                 }
             }
             else
