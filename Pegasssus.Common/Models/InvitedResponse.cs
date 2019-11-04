@@ -20,6 +20,8 @@ namespace Pegasssus.Common.Models
 
         public string Email { get; set; }
 
+        public int EventId { get; set; }
+
         public string EventName { get; set; }
 
         public int EventInvitesNumber { get; set; }

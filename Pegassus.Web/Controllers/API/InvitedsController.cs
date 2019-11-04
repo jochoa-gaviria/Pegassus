@@ -62,5 +62,27 @@ namespace Pegassus.Web.Controllers.API
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("GetInviteds")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IEnumerable<InvitedResponse> GetInviteds()
+        {
+            return _dataContext.Inviteds.Select(pt => new InvitedResponse
+            {
+                Id = pt.Id,
+                FirstName = pt.User.FirstName,
+                LastName = pt.User.LastName,
+                Document = pt.User.Document,
+                Address = pt.User.Address,
+                PhoneNumber = pt.User.PhoneNumber,
+                Email = pt.User.Email,
+                EventId = pt.Event.Id,
+                EventName = pt.Event.Name,
+                EventInvitesNumber = pt.Event.InvitesNumber,
+                EventType = pt.Event.EventType.Name,
+                EventRemarks = pt.Event.Remarks,
+            });
+        }
+
     }
 }

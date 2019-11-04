@@ -24,6 +24,7 @@ namespace Pegassus.Prism.ViewModels
         private string _address;
         private string _email;
         private string _phone;
+        private int _invitedsNumber;
         private EventResponse _event;
         private DelegateCommand _registerCommand;
         private DelegateCommand _backToEventsCommand;
@@ -83,10 +84,11 @@ namespace Pegassus.Prism.ViewModels
             set => SetProperty(ref _isEnabled, value);
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        public async override void OnNavigatedTo(INavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);
             _event = JsonConvert.DeserializeObject<EventResponse>(Settings.Event);
+            await ValidateInvitedsNumber();
         }
         private async void BackToEvents()
         {
@@ -143,6 +145,7 @@ namespace Pegassus.Prism.ViewModels
                 $"{response.Message} Please enter another guest",
                 "Accept");
             CleanData();
+            await ValidateInvitedsNumber();
         }
 
         private void CleanData()
@@ -154,10 +157,44 @@ namespace Pegassus.Prism.ViewModels
             Email = string.Empty;
             Phone = string.Empty;
         }
+        private async Task<bool> ValidateInvitedsNumber()
+        {
+            IsRunning = true;
+            IsEnabled = false;
+            var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            var response = await _apiService.GetListAsync<InvitedResponse>(
+            url,
+            "/api",
+            "/Inviteds/GetInviteds",
+            "bearer",
+            token.Token);
+            IsRunning = false;
+            IsEnabled = true;
+
+            if (!response.IsSuccess)
+            {
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    response.Message,
+                    "Accept");
+                return false ;
+            }
+            var eventVar = JsonConvert.DeserializeObject<EventResponse>(Settings.Event);
+            var inviteds = (List<InvitedResponse>)response.Result;
+            _invitedsNumber = inviteds.Where(i => i.EventId == eventVar.Id).Count();
+            Title = $"Add guests number {_invitedsNumber + 1}";
+            return true;
+        }
         private async Task<bool> ValidateData()
         {
-            //TODO
-            //validate number of inviteds
+            var _eventVar = JsonConvert.DeserializeObject<EventResponse>(Settings.Event);
+            if (_invitedsNumber>=_eventVar.InvitedsNumber)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "You cannot invite more people than the event has", "Accept");
+                return false;
+            }
+
             if (string.IsNullOrEmpty(Document))
             {
                 await App.Current.MainPage.DisplayAlert("Error", "You must enter a document.", "Accept");
