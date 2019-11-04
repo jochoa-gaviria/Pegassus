@@ -24,7 +24,7 @@ namespace Pegassus.Prism.ViewModels
         private async void SelectEvent()
         {
             Settings.Event = JsonConvert.SerializeObject(this);
-            await _navigationService.NavigateAsync("EventPage");
+            await _navigationService.NavigateAsync("EventTabbedPage");
         }
     }
 }

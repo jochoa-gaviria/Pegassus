@@ -72,8 +72,8 @@ namespace Pegassus.Prism.ViewModels
                     {
 
                         Icon = "ic_event_note",
-                        PageName = "EventPage",
-                        Title = "My Events"
+                        PageName = "EventTabbedPage",
+                        Title = "My Event"
                     },
 
                     new Menu

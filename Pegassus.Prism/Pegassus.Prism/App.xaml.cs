@@ -40,7 +40,7 @@ namespace Pegassus.Prism
                 }
                 else
                 {
-                    await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventPage");
+                    await NavigationService.NavigateAsync("/PegassusMasterDetailPage/NavigationPage/EventTabbedPage");
                 }
             }
             else
@@ -69,6 +69,8 @@ namespace Pegassus.Prism
             containerRegistry.RegisterForNavigation<RoomsPage, RoomsPageViewModel>();
             containerRegistry.RegisterForNavigation<AddInvitedsPage, AddInvitedsPageViewModel>();
             containerRegistry.RegisterForNavigation<RoomPage, RoomPageViewModel>();
+            containerRegistry.RegisterForNavigation<EventTabbedPage, EventTabbedPageViewModel>();
+            containerRegistry.RegisterForNavigation<InvitedsPage, InvitedsPageViewModel>();
         }
     }
 }

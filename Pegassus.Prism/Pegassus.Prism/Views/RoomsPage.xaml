@@ -21,8 +21,8 @@
                             <Frame
                             CornerRadius="10"
                             HasShadow="True"
-                            Margin="0,0,0,5">
-                            <Frame.GestureRecognizers>
+                            Margin="10,0,25,10">
+                    <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectRoomCommand}"/>
                     </Frame.GestureRecognizers>
                     <Grid>
