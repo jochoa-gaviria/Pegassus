@@ -20,6 +20,12 @@ namespace Pegasssus.Common.Models
         public string Email { get; set; }
 
         [Required]
+        public string Role { get; set; }
+
+        public int EventId { get; set; }
+
+
+        [Required]
         public string Phone { get; set; }
 
         [Required]

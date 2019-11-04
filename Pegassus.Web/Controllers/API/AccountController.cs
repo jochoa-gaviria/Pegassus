@@ -66,25 +66,55 @@ namespace Pegassus.Web.Controllers.API
                 return BadRequest(result.Errors.FirstOrDefault().Description);
             }
             var userNew = await _userHelper.GetUserByEmailAsync(request.Email);
-            await _userHelper.AddUserToRoleAsync(userNew, "Organizer");
-            _dataContext.Organizers.Add(new Organizer { User = userNew });
-            await _dataContext.SaveChangesAsync();
-
-            var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-            var tokenLink = Url.Action("ConfirmEmail", "Account", new
+            await _userHelper.AddUserToRoleAsync(userNew, request.Role);
+         
+            if (request.Role=="Organizer")
             {
-                userid = user.Id,
-                token = myToken,
-            }, protocol: HttpContext.Request.Scheme);
+                _dataContext.Organizers.Add(new Organizer { User = userNew });
+                await _dataContext.SaveChangesAsync();
 
-            _mailHelper.SendMail(request.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                $"To allow the user, " +
-                $"Please click on this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
-            return Ok(new Response<object>
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken,
+                }, protocol: HttpContext.Request.Scheme);
+                _mailHelper.SendMail(request.Email, "Pegassus Email confirmation", $"<h1>Email Confirmation</h1>" +
+                $"Hi {request.FirstName}" +
+                $"Your register as Event Organizer was successfully" +
+                $"Please click on this link:<br><br><a href = \"{tokenLink}\">Confirm Email</a>");
+
+                return Ok(new Response<object>
+                {
+                    IsSuccess = true,
+                    Message = "A confirmation email was sent. Please confirm your account and login into the App."
+                });
+            }
+            else
             {
-                IsSuccess = true,
-                Message = "A confirmation email was sent. Please confirm your account and login into the App."
-            });
+                var eventVar = _dataContext.Events.FirstOrDefault(e => e.Id == request.EventId);
+                _dataContext.Inviteds.Add(new Invited { User = userNew, Event=eventVar });
+                await _dataContext.SaveChangesAsync();
+
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken,
+                }, protocol: HttpContext.Request.Scheme);
+                _mailHelper.SendMail(request.Email, "Pegassus Email confirmation", $"<h1>Email Confirmation</h1>" +
+                $"Hi {request.FirstName} <br>" +
+                $"You got an invitation for a <b>{eventVar.Name}</b> Event from Pegassus Events.<br>" +
+                $" Remeber your password it's your document.<br>" +
+                $"Please confirm your asistence on this link:<br><br><a href = \"{tokenLink}\">Confirm Email</a>");
+
+                return Ok(new Response<object>
+                {
+                    IsSuccess = true,
+                    Message = "A confirmation email was sent to the Invited."
+                });
+            }
+          
         }
 
         [HttpPost]

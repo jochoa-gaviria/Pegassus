@@ -76,7 +76,8 @@ namespace Pegassus.Prism.ViewModels
                 FirstName = FirstName,
                 LastName = LastName,
                 Password = Password,
-                Phone = Phone
+                Phone = Phone,
+                Role = "Organizer"
             };
 
             var url = App.Current.Resources["UrlAPI"].ToString();
