@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Pegassus.Prism.ViewModels
 {
@@ -21,19 +22,25 @@ namespace Pegassus.Prism.ViewModels
         private DelegateCommand _addEventCommand;
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
+        private static EventsPageViewModel _instance;
 
         public EventsPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
+            _instance = this;
             _navigationService = navigationService;
             _apiService = apiService;
             LoadUser();
             IsRunning = false;
         }
 
+        public static EventsPageViewModel GetInstance()
+        {
+            return _instance;
+        }
+
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);
-            RefreshUser();
         }
 
         public bool IsRunning
@@ -82,7 +89,7 @@ namespace Pegassus.Prism.ViewModels
             }
         }
 
-        private async void RefreshUser()
+        public async Task RefreshUser()
         {
             IsRunning = true;
             var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);

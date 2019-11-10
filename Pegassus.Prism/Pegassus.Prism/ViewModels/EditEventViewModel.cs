@@ -36,7 +36,7 @@ namespace Pegassus.Prism.ViewModels
             Title = "Add or Edit a Event";
         }
 
-        public DelegateCommand SaveCommand => _saveCommand ?? (_saveCommand = new DelegateCommand(Save));
+        public DelegateCommand SaveCommand => _saveCommand ?? (_saveCommand = new DelegateCommand(SaveAsync));
 
         public ObservableCollection<EventTypeResponse> EventTypes
         {
@@ -212,7 +212,7 @@ namespace Pegassus.Prism.ViewModels
             }
         }
 
-        private async void Save()
+        private async void SaveAsync()
         {
             var isValid = await ValidateData();
             if (!isValid)
@@ -256,14 +256,14 @@ namespace Pegassus.Prism.ViewModels
                     return;
                 }
 
+
+
                 await App.Current.MainPage.DisplayAlert(
                     "Ok",
                     "The event was updated susccesfully, please select the best room for you.",
                     "Accept");
-                //TODO
-                //Para la edicion no navegar automaticamente.
-                //Dar la elección si se va a cambiar el salon o añadir invitados
-                //await _navigationService.NavigateAsync("RoomsPage");
+
+                await EventsPageViewModel.GetInstance().RefreshUser();
             }
             else
             {
@@ -303,6 +303,7 @@ namespace Pegassus.Prism.ViewModels
                     "Accept");
 
                 Settings.Event = JsonConvert.SerializeObject(request);
+                await EventsPageViewModel.GetInstance().RefreshUser();
                 await _navigationService.NavigateAsync("RoomsPage");
             }
         }
