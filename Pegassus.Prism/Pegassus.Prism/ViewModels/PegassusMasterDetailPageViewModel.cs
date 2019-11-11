@@ -37,13 +37,6 @@ namespace Pegassus.Prism.ViewModels
 
                     new Menu
                     {
-                        Icon = "ic_list_alt",
-                        PageName = "AgendaPage",
-                        Title = "My Agenda"
-                    },
-
-                    new Menu
-                    {
                         Icon = "ic_person",
                         PageName = "ProfilePage",
                         Title = "Modify Profile"
@@ -74,13 +67,6 @@ namespace Pegassus.Prism.ViewModels
                         Icon = "ic_event_note",
                         PageName = "EventTabbedPage",
                         Title = "My Event"
-                    },
-
-                    new Menu
-                    {
-                        Icon = "ic_list_alt",
-                        PageName = "AgendaPage",
-                        Title = "My Agenda"
                     },
 
                     new Menu
