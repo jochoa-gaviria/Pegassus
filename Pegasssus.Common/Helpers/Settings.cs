@@ -11,6 +11,7 @@ namespace Pegasssus.Common.Helpers
         private const string _invited = "Invited";
         private const string _isRemembered = "IsRemembered";
         private const string _room = "Room";
+        private const string _eventDate = "EventDate";
         private static readonly string _stringDefault = string.Empty;
         private static readonly bool _boolDefault = false;
         private static readonly string _userType = string.Empty;
@@ -21,6 +22,12 @@ namespace Pegasssus.Common.Helpers
         {
             get => AppSettings.GetValueOrDefault(_room, _stringDefault);
             set => AppSettings.AddOrUpdateValue(_room, value);
+        }
+
+        public static string EventDate
+        {
+            get => AppSettings.GetValueOrDefault(_eventDate, _stringDefault);
+            set => AppSettings.AddOrUpdateValue(_eventDate, value);
         }
 
         public static string Token

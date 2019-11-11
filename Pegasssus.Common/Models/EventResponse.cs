@@ -14,6 +14,8 @@ namespace Pegasssus.Common.Models
 
         public string EventType { get; set; }
 
+        public int EventTypeId { get; set; }
+
         public string Remarks { get; set; }
 
         public DateTime Date { get; set; }

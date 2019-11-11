@@ -57,10 +57,9 @@ namespace Pegassus.Web.Controllers.API
                     InvitedsNumber = p.InvitesNumber,
                     Id = p.Id,
                     EventType = p.EventType.Name,
+                    EventTypeId = p.EventType.Id,
                     Name = p.Name,
                     Remarks = p.Remarks,
-                    //RoomAddress = p.Room.Address,
-                    //RoomCapacity = p.Room.Capacity
                     //TODO -> Add the room data
                 }).ToList()
             };

@@ -232,7 +232,7 @@ namespace Pegassus.Prism.ViewModels
                     InvitedsNumber = InvitedNumber.Value,
                     EventTypeId = EventType.Id,
                     OrganizerId = _organizer.Id,
-                    Remarks = Event.Remarks
+                    Remarks = Event.Remarks,
                 };
                 var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
                 var url = App.Current.Resources["UrlAPI"].ToString();
@@ -262,7 +262,8 @@ namespace Pegassus.Prism.ViewModels
                     "Ok",
                     "The event was updated susccesfully, please select the best room for you.",
                     "Accept");
-
+                Settings.Event = JsonConvert.SerializeObject(request);
+                Settings.EventDate = Event.Date.ToString();
                 await EventsPageViewModel.GetInstance().RefreshUser();
             }
             else
@@ -303,6 +304,7 @@ namespace Pegassus.Prism.ViewModels
                     "Accept");
 
                 Settings.Event = JsonConvert.SerializeObject(request);
+                Settings.EventDate = Event.Date.ToString();
                 await EventsPageViewModel.GetInstance().RefreshUser();
                 await _navigationService.NavigateAsync("RoomsPage");
             }

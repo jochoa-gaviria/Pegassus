@@ -71,6 +71,7 @@ namespace Pegassus.Prism.ViewModels
                     EventType = p.EventType,
                     Date = p.Date,
                     Remarks = p.Remarks,
+                    EventTypeId = p.EventTypeId
                 }).ToList());
             }
             else

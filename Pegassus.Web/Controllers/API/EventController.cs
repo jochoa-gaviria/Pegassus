@@ -89,6 +89,12 @@ namespace Pegassus.Web.Controllers.API
                 return BadRequest("Not valid event type.");
             }
 
+            if (request.RoomId != 0)
+            {
+                var room = await _dataContext.Rooms.FindAsync(request.RoomId);
+                oldEvent.Room = room;
+            }
+
             oldEvent.Name = request.Name;
             oldEvent.EventType = eventType;
             oldEvent.InvitesNumber = request.InvitedsNumber;
