@@ -1,6 +1,7 @@
 ﻿using Pegasssus.Common.Models;
 using Pegassus.Web.Data;
 using Pegassus.Web.Data.Entities;
+using Pegassus.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,75 @@ namespace Pegassus.Web.Helpers
                 EventType = eventVar.EventType.Name,
                 InvitedsNumber = eventVar.InvitesNumber,
                 Remarks = eventVar.Remarks
+            };
+        }
+
+        public async Task<Room> ToRoomAsync(RoomViewModel model, string path, bool isNew)
+        {
+            var room = new Room
+            {
+                Id = isNew ? 0 : model.Id,
+                Agendas = model.Agendas,
+                Address = model.Address,
+                Capacity = model.Capacity,
+                ImageUrl = path,
+                Events = model.Events,
+                Owner = await _dataContext.Owners.FindAsync(model.OwnerId),
+                Remarks = model.Remarks
+            };
+
+            return room;
+        }
+
+        public RoomViewModel ToRoomViewModel(Room room)
+        {
+            return new RoomViewModel
+            {
+                Id = room.Id,
+                Agendas = room.Agendas,
+                Address = room.Address,
+                Capacity = room.Capacity,
+                ImageUrl = room.ImageUrl,
+                Events = room.Events,
+                Owner = room.Owner,
+                Remarks = room.Remarks,
+                OwnerId = room.Owner.Id,
+            };
+        }
+
+        public async Task<Event> ToEventAsync(EventViewModel model, bool isNew)
+        {
+            return new Event
+            {
+                Id = isNew ? 0 : model.Id,
+                Agenda = model.Agenda,
+                EventType = await _dataContext.EventTypes.FindAsync(model.EventTypeId),
+                Room = await _dataContext.Rooms.FindAsync(model.RoomId),
+                Remarks = model.Remarks,
+                Inviteds = model.Inviteds,
+                InvitesNumber = model.InvitesNumber,
+                Name = model.Name,
+                Organizer = model.Organizer
+            };
+        }
+
+        public EventViewModel ToEventViewModel(Event Event)
+        {
+            return new EventViewModel
+            {
+                Id = Event.Id,
+                Date = Event.Agenda.Date,
+                RoomId = Event.Room.Id,
+                Room = Event.Room,
+                EventType = Event.EventType,
+                Agenda = Event.Agenda,
+                Inviteds = Event.Inviteds,
+                Organizer = Event.Organizer,
+                EventTypeId = Event.EventType.Id,
+                InvitesNumber = Event.InvitesNumber,
+                Name = Event.Name,
+                Remarks = Event.Remarks,
+                EventTypes = _combosHelper.GetComboEventTypes()
             };
         }
     }

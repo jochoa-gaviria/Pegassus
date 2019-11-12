@@ -1,7 +1,6 @@
-﻿@model Pegassus.Web.Data.Entities.Organizer
-
+﻿@model Pegassus.Web.Models.EditUserViewModel
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit";
 }
 
 <h2>Edit</h2>
@@ -9,18 +8,21 @@
 <h4>Organizer</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
+	<div class="col-md-4">
+		<form asp-action="Edit">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+
+			<partial name="_User" />
+
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+				<a asp-action="Index" class="btn btn-success">Back to List</a>
+			</div>
+		</form>
+	</div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

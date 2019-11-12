@@ -18,6 +18,7 @@ namespace Pegassus.Web.Helpers
         Task<SignInResult> LoginAsync(LoginViewModel model);
         Task LogoutAsync();
         Task<SignInResult> ValidatePasswordAsync(User user, string password);
+        Task<bool> DeleteUserAsync(string email);
         Task<IdentityResult> UpdateUserAsync(User user);
         Task<string> GenerateEmailConfirmationTokenAsync(User user);
         Task<User> GetUserByIdAsync(string userId);

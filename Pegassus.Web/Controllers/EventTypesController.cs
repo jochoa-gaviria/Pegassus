@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Pegassus.Web.Data.Entities;
 
 namespace Pegassus.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EventTypesController : Controller
     {
         private readonly DataContext _context;
@@ -131,15 +133,12 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            return View(eventType);
-        }
+            if (eventType.Events.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "The event type can't be removed.");
+                return RedirectToAction(nameof(Index));
+            }
 
-        // POST: EventTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var eventType = await _context.EventTypes.FindAsync(id);
             _context.EventTypes.Remove(eventType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

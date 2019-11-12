@@ -1,28 +1,26 @@
-﻿@model Pegassus.Web.Models.EditUserViewModel
+﻿@model Pegassus.Web.Models.EventViewModel
+
 @{
 	ViewData["Title"] = "Edit";
 }
 
 <h2>Edit</h2>
 
-<h4>Admin</h4>
+<h4>Event</h4>
 <hr />
 <div class="row">
 	<div class="col-md-4">
-		<form asp-action="Edit">
+		<form asp-action="EditEvent">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="RoomId" />
 			<input type="hidden" asp-for="Id" />
 
-			<partial name="_User" />
+			<partial name="_Event" />
 
 			<div class="form-group">
 				<input type="submit" value="Save" class="btn btn-primary" />
-				<a asp-action="Index" class="btn btn-success">Back to List</a>
+				<a asp-action="DetailsRoom" asp-route-id="@Model.RoomId" class="btn btn-success">Back to Room</a>
 			</div>
 		</form>
 	</div>
 </div>
-
-@section Scripts {
-	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

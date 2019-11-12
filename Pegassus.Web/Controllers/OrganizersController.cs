@@ -2,30 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pegassus.Web.Data;
 using Pegassus.Web.Data.Entities;
+using Pegassus.Web.Helpers;
+using Pegassus.Web.Models;
 
 namespace Pegassus.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class OrganizersController : Controller
     {
-        private readonly DataContext _context;
+        private readonly DataContext _dataContext;
+        private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
 
-        public OrganizersController(DataContext context)
+        public OrganizersController(
+            DataContext context,
+            IUserHelper userHelper,
+            IMailHelper mailHelper)
         {
-            _context = context;
+            _dataContext = context;
+            _userHelper = userHelper;
+            _mailHelper = mailHelper;
         }
 
-        // GET: Organizers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Organizers.ToListAsync());
+            return View(_dataContext.Admins
+                .Include(o => o.User));
         }
 
-        // GET: Organizers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +43,82 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            var organizer = await _context.Organizers
+            var admin = await _dataContext.Admins
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (organizer == null)
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            return View(organizer);
+            return View(admin);
         }
 
-        // GET: Organizers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Organizers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Organizer organizer)
+        public async Task<IActionResult> Create(AddUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(organizer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = new User
+                {
+                    Address = model.Address,
+                    Document = model.Document,
+                    Email = model.Username,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber,
+                    UserName = model.Username
+                };
+
+                var response = await _userHelper.AddUserAsync(user, model.Password);
+                if (response.Succeeded)
+                {
+                    var userInDB = await _userHelper.GetUserByEmailAsync(model.Username);
+                    await _userHelper.AddUserToRoleAsync(userInDB, "Organizer");
+
+                    var admin = new Admin
+                    {
+                        User = userInDB
+                    };
+
+                    _dataContext.Admins.Add(admin);
+
+                    try
+                    {
+                        await _dataContext.SaveChangesAsync();
+
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = Url.Action("ConfirmEmail", "Account", new
+                        {
+                            userid = user.Id,
+                            token = myToken
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        _mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                            $"To allow the user, " +
+                            $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.ToString());
+                        return View(model);
+                    }
+                }
+
+                ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
             }
-            return View(organizer);
+
+            return View(model);
         }
 
-        // GET: Organizers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,50 +126,50 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            var organizer = await _context.Organizers.FindAsync(id);
-            if (organizer == null)
+            var admin = await _dataContext.Admins
+                .Include(o => o.User)
+                .FirstOrDefaultAsync(o => o.Id == id.Value);
+            if (admin == null)
             {
                 return NotFound();
             }
-            return View(organizer);
+
+            var model = new EditUserViewModel
+            {
+                Address = admin.User.Address,
+                Document = admin.User.Document,
+                FirstName = admin.User.FirstName,
+                Id = admin.Id,
+                LastName = admin.User.LastName,
+                PhoneNumber = admin.User.PhoneNumber
+            };
+
+            return View(model);
         }
 
-        // POST: Organizers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Organizer organizer)
+        public async Task<IActionResult> Edit(EditUserViewModel model)
         {
-            if (id != organizer.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(organizer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrganizerExists(organizer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                var admin = await _dataContext.Admins
+                    .Include(o => o.User)
+                    .FirstOrDefaultAsync(o => o.Id == model.Id);
+
+                admin.User.Document = model.Document;
+                admin.User.FirstName = model.FirstName;
+                admin.User.LastName = model.LastName;
+                admin.User.Address = model.Address;
+                admin.User.PhoneNumber = model.PhoneNumber;
+
+                await _userHelper.UpdateUserAsync(admin.User);
                 return RedirectToAction(nameof(Index));
             }
-            return View(organizer);
+
+            return View(model);
         }
 
-        // GET: Organizers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +177,18 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            var organizer = await _context.Organizers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (organizer == null)
+            var admin = await _dataContext.Admins
+                .Include(o => o.User)
+                .FirstOrDefaultAsync(o => o.Id == id);
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            return View(organizer);
-        }
-
-        // POST: Organizers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var organizer = await _context.Organizers.FindAsync(id);
-            _context.Organizers.Remove(organizer);
-            await _context.SaveChangesAsync();
+            await _userHelper.DeleteUserAsync(admin.User.Email);
+            _dataContext.Admins.Remove(admin);
+            await _dataContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool OrganizerExists(int id)
-        {
-            return _context.Organizers.Any(e => e.Id == id);
         }
     }
 }
