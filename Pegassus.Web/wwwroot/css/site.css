@@ -66,6 +66,6 @@ body {
 }
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
-    min-height: 50vh;
-    margin: auto;
+    min-height: 50vh !important;
+    margin: auto !important;
 }
