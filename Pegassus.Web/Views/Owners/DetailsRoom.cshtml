@@ -4,7 +4,6 @@
 	ViewData["Title"] = "Details";
 }
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
 <h2>Room</h2>
 
@@ -53,7 +52,7 @@
 	<a asp-action="AddEvent" asp-route-id="@Model.Id" class="btn btn-primary">Add Event</a>
 	<a asp-action="Details" asp-route-id="@Model.Owner.Id" class="btn btn-success">Back to Owner</a>
 </div>
-<h4>History</h4>
+<h4>Events</h4>
 <hr />
 @if (Model.Events.Count == 0)
 {
@@ -132,7 +131,6 @@ else
 
 @section Scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-	<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
 	<script type="text/javascript">
         $(document).ready(function () {

@@ -13,7 +13,7 @@ using Pegassus.Web.Models;
 
 namespace Pegassus.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Organizer")]
     public class OrganizersController : Controller
     {
         private readonly DataContext _dataContext;
@@ -32,7 +32,7 @@ namespace Pegassus.Web.Controllers
 
         public IActionResult Index()
         {
-            return View(_dataContext.Admins
+            return View(_dataContext.Organizers
                 .Include(o => o.User));
         }
 
@@ -43,15 +43,15 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            var admin = await _dataContext.Admins
+            var Organizer = await _dataContext.Organizers
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (admin == null)
+            if (Organizer == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(Organizer);
         }
 
         public IActionResult Create()
@@ -82,12 +82,12 @@ namespace Pegassus.Web.Controllers
                     var userInDB = await _userHelper.GetUserByEmailAsync(model.Username);
                     await _userHelper.AddUserToRoleAsync(userInDB, "Organizer");
 
-                    var admin = new Admin
+                    var Organizer = new Organizer
                     {
                         User = userInDB
                     };
 
-                    _dataContext.Admins.Add(admin);
+                    _dataContext.Organizers.Add(Organizer);
 
                     try
                     {
@@ -126,22 +126,22 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            var admin = await _dataContext.Admins
+            var Organizer = await _dataContext.Organizers
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.Id == id.Value);
-            if (admin == null)
+            if (Organizer == null)
             {
                 return NotFound();
             }
 
             var model = new EditUserViewModel
             {
-                Address = admin.User.Address,
-                Document = admin.User.Document,
-                FirstName = admin.User.FirstName,
-                Id = admin.Id,
-                LastName = admin.User.LastName,
-                PhoneNumber = admin.User.PhoneNumber
+                Address = Organizer.User.Address,
+                Document = Organizer.User.Document,
+                FirstName = Organizer.User.FirstName,
+                Id = Organizer.Id,
+                LastName = Organizer.User.LastName,
+                PhoneNumber = Organizer.User.PhoneNumber
             };
 
             return View(model);
@@ -153,17 +153,17 @@ namespace Pegassus.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var admin = await _dataContext.Admins
+                var Organizer = await _dataContext.Organizers
                     .Include(o => o.User)
                     .FirstOrDefaultAsync(o => o.Id == model.Id);
 
-                admin.User.Document = model.Document;
-                admin.User.FirstName = model.FirstName;
-                admin.User.LastName = model.LastName;
-                admin.User.Address = model.Address;
-                admin.User.PhoneNumber = model.PhoneNumber;
+                Organizer.User.Document = model.Document;
+                Organizer.User.FirstName = model.FirstName;
+                Organizer.User.LastName = model.LastName;
+                Organizer.User.Address = model.Address;
+                Organizer.User.PhoneNumber = model.PhoneNumber;
 
-                await _userHelper.UpdateUserAsync(admin.User);
+                await _userHelper.UpdateUserAsync(Organizer.User);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -177,16 +177,16 @@ namespace Pegassus.Web.Controllers
                 return NotFound();
             }
 
-            var admin = await _dataContext.Admins
+            var Organizer = await _dataContext.Organizers
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.Id == id);
-            if (admin == null)
+            if (Organizer == null)
             {
                 return NotFound();
             }
 
-            await _userHelper.DeleteUserAsync(admin.User.Email);
-            _dataContext.Admins.Remove(admin);
+            await _userHelper.DeleteUserAsync(Organizer.User.Email);
+            _dataContext.Organizers.Remove(Organizer);
             await _dataContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

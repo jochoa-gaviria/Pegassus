@@ -428,13 +428,13 @@ namespace Pegassus.Web.Controllers
             return View(model);
         }
 
-        public IActionResult ChangePassword()
+        public IActionResult ChangePW()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePW(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
             {

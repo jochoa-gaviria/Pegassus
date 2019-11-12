@@ -13,7 +13,7 @@ using Pegassus.Web.Models;
 
 namespace Pegassus.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Owner")]
     public class OwnersController : Controller
     {
         private readonly DataContext _dataContext;
