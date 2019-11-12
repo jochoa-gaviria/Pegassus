@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Pegasssus.Common\Pegasssus.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\Rooms\" />
+  </ItemGroup>
+
 </Project>

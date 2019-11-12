@@ -304,6 +304,11 @@ namespace Pegassus.Web.Controllers
                 .Include(p => p.Owner)
                 .ThenInclude(o => o.User)
                 .Include(p => p.Events)
+                .ThenInclude(e => e.Agenda)
+                .Include(p => p.Events)
+                .ThenInclude(e => e.EventType)
+                .Include(p => p.Events)
+                .ThenInclude(e => e.Organizer)
                 .FirstOrDefaultAsync(o => o.Id == id.Value);
             if (room == null)
             {
@@ -341,6 +346,8 @@ namespace Pegassus.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                Agenda agenda = await _dataContext.Agendas.Where(x => x.Date > model.Date).OrderBy(x => x.Date).FirstOrDefaultAsync();
+                model.Agenda = agenda;
                 var Event = await _converterHelper.ToEventAsync(model, true);
                 _dataContext.Events.Add(Event);
                 await _dataContext.SaveChangesAsync();
